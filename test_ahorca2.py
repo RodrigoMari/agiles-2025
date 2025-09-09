@@ -23,3 +23,11 @@ def testLetraIncorrectaYDescuentaVida():
     juego.adivinar_letra('r')
     assert 'r' not in juego.letras_adivinadas
     assert juego.vidas == 4
+
+def testLetraCorrectaYActualizaPalabraOculta():
+    juego = Ahorcado(['python'], vidas=5)
+    juego.adivinar_letra('y')
+    assert 'y' in juego.letras_adivinadas
+    assert juego.palabra_oculta[1] == 'y'
+    assert juego.vidas == 5
+

@@ -19,5 +19,8 @@ class Ahorcado:
         self.letras_intentadas.append(letra)
         if letra in self.palabra_secreta:
             self.letras_adivinadas.append(letra)
+            for i, l in enumerate(self.palabra_secreta):
+                if l == letra:
+                    self.palabra_oculta[i] = letra
         else:
             self.descuenta_vida()
