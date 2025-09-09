@@ -1,7 +1,7 @@
 import pytest
 from ahorca2 import Ahorcado
 
-def test_inicializa_juego():
+def testInicializaJuego():
     palabras = ['python']
     juego = Ahorcado(palabras, vidas=5) # instancia de la clase Ahorcado, nueva partida
     assert juego.palabra_secreta in palabras
@@ -11,3 +11,15 @@ def test_inicializa_juego():
     assert juego.letras_intentadas == []
     assert juego.terminado is False
     assert juego.victoria is False
+
+def testLetraCorrectaYNoDescuentaVida():
+    juego = Ahorcado(['python'], vidas=5)
+    juego.adivinar_letra('p')
+    assert 'p' in juego.letras_adivinadas
+    assert juego.vidas == 5
+
+def testLetraIncorrectaYDescuentaVida():
+    juego = Ahorcado(['python'], vidas=5)
+    juego.adivinar_letra('r')
+    assert 'r' not in juego.letras_adivinadas
+    assert juego.vidas == 4
