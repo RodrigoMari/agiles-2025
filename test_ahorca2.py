@@ -31,3 +31,8 @@ def testLetraCorrectaYActualizaPalabraOculta():
     assert juego.palabra_oculta[1] == 'y'
     assert juego.vidas == 5
 
+def testLetraIncorrectaYNoActualizaPalabraOculta():
+    juego = Ahorcado(['python'], vidas=5)
+    juego.adivinar_letra('z')
+    assert 'z' not in juego.letras_adivinadas
+    assert juego.palabra_oculta == ['_'] * len(juego.palabra_secreta)
