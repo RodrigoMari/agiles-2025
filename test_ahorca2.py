@@ -43,3 +43,8 @@ def testPalabraCorrectaYGana():
     assert juego.victoria is True
     assert juego.terminado is True
     assert juego.palabra_oculta == list(juego.palabra_secreta)
+
+def testPalabraIncorrectaYPierdeVida():
+    juego = Ahorcado(['python'], vidas=5)
+    juego.adivinar_palabra('java')
+    assert juego.vidas == 4

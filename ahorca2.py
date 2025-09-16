@@ -32,4 +32,6 @@ class Ahorcado:
             self.palabra_oculta = list(self.palabra_secreta)
             self.victoria = True
             self.terminado = True
+        else:
+            self.descuenta_vida()
 
