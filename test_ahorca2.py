@@ -8,6 +8,7 @@ def testInicializaJuego():
     assert juego.vidas == 5
     assert juego.palabra_oculta == ['_'] * len(juego.palabra_secreta)
     assert juego.letras_adivinadas == []
+    assert juego.palabras_intentadas == []
     assert juego.letras_intentadas == []
     assert juego.terminado is False
     assert juego.victoria is False
@@ -53,4 +54,10 @@ def testLetraNoRepetida():
     juego = Ahorcado(['python'], vidas=5)
     juego.letras_intentadas = ['p', 'y']
     assert juego.letra_repetida('t') is False
+    assert juego.vidas == 5  # no debe descontar vida
+
+def testPalabraNoRepetida():
+    juego = Ahorcado(['python'], vidas=5)
+    juego.palabras_intentadas = ['java', 'script']
+    assert juego.palabra_repetida('master') is False
     assert juego.vidas == 5  # no debe descontar vida
