@@ -13,8 +13,11 @@ class Ahorcado:
     def descuenta_vida(self):
         self.vidas -= 1
 
+    def letra_repetida(self, letra):
+        return letra in self.letras_intentadas # Si la letra es repetida devuelve True, sino False
+
     def adivinar_letra(self, letra):
-        if self.terminado or letra in self.letras_intentadas:
+        if self.terminado or self.letra_repetida(letra):
             return
         self.letras_intentadas.append(letra)
         if letra in self.palabra_secreta:

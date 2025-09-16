@@ -48,3 +48,9 @@ def testPalabraIncorrectaYPierdeVida():
     juego = Ahorcado(['python'], vidas=5)
     juego.adivinar_palabra('java')
     assert juego.vidas == 4
+
+def testLetraNoRepetida():
+    juego = Ahorcado(['python'], vidas=5)
+    juego.letras_intentadas = ['p', 'y']
+    assert juego.letra_repetida('t') is False
+    assert juego.vidas == 5  # no debe descontar vida
