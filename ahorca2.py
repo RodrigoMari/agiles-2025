@@ -24,3 +24,12 @@ class Ahorcado:
                     self.palabra_oculta[i] = letra
         else:
             self.descuenta_vida()
+
+    def adivinar_palabra(self, palabra):
+        if self.terminado or len(palabra) < 2: 
+            return  # Si el juego ha terminado, o la palabra es de longitud 1 (en realidad es una letra)
+        if palabra == self.palabra_secreta:
+            self.palabra_oculta = list(self.palabra_secreta)
+            self.victoria = True
+            self.terminado = True
+
