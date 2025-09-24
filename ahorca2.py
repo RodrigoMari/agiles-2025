@@ -41,6 +41,9 @@ class Ahorcado:
             for i, l in enumerate(self.palabra_secreta):
                 if l == letra:
                     self.palabra_oculta[i] = letra
+            if self.palabra_oculta == list(self.palabra_secreta):
+                self.victoria = True
+                self.terminado = True
         else:
             self.descuenta_vida()
 

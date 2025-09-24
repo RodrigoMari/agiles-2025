@@ -78,3 +78,12 @@ def testMostrarPalabraFinal():
     juego = Ahorcado(['python'], vidas=5)
     assert juego.termina_juego() == juego.palabra_secreta # en un futuro podemos actualizar la palabra_oculta para que muestre la palabra_secreta
 
+def testLetraCorrectaYGana():
+    juego = Ahorcado(['hi'], vidas=5)
+    juego.adivinar_letra('h')
+    assert juego.victoria is False
+    assert juego.terminado is False
+    juego.adivinar_letra('i')
+    assert juego.victoria is True
+    assert juego.terminado is True
+    assert juego.palabra_oculta == list(juego.palabra_secreta)
