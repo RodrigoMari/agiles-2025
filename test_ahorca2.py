@@ -68,3 +68,8 @@ def testPalabraNoRepetida():
     assert juego.palabra_repetida('master') is False
     assert juego.vidas == 5  # no debe descontar vida
 
+def testPalabraRepetida():
+    juego = Ahorcado(['python'], vidas=5)
+    juego.palabras_intentadas = ['java', 'script']
+    assert juego.palabra_repetida('java') is True
+    assert juego.vidas == 5  # no debe descontar vida
