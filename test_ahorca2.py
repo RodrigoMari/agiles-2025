@@ -87,3 +87,10 @@ def testLetraCorrectaYGana():
     assert juego.victoria is True
     assert juego.terminado is True
     assert juego.palabra_oculta == list(juego.palabra_secreta)
+
+def testSinVidasRestantesYPierde():
+    juego = Ahorcado(['hi'], vidas=1)
+    juego.adivinar_letra('x')  # letra incorrecta
+    assert juego.vidas == 0
+    assert juego.victoria is False
+    assert juego.terminado is True
