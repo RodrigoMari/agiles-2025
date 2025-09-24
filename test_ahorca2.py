@@ -73,3 +73,8 @@ def testPalabraRepetida():
     juego.palabras_intentadas = ['java', 'script']
     assert juego.palabra_repetida('java') is True
     assert juego.vidas == 5  # no debe descontar vida
+
+def testMostrarPalabraFinal():
+    juego = Ahorcado(['python'], vidas=5)
+    assert juego.termina_juego() == juego.palabra_secreta # en un futuro podemos actualizar la palabra_oculta para que muestre la palabra_secreta
+

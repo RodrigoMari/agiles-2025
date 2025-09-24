@@ -11,8 +11,18 @@ class Ahorcado:
         self.terminado = False
         self.victoria = False
 
+    def termina_juego(self):
+      self.terminado = True
+      if self.vidas <= 0:
+          self.victoria = False
+      else:
+          self.victoria = True
+      return self.palabra_secreta
+
     def descuenta_vida(self):
         self.vidas -= 1
+        if self.vidas <= 0:
+            self.termina_juego()
 
     def letra_repetida(self, letra):
         return letra in self.letras_intentadas # Si la letra es repetida devuelve True, sino False
