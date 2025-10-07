@@ -1,0 +1,52 @@
+name: CI Server (Python with Coverage + SonarCloud)
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build-test-coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Descargar el código del repositorio
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Configurar Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # Instalar dependencias y herramientas de prueba
+      - name: Install dependencies and testing tools
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          python -m pip install pytest pytest-cov
+
+      # Verificar errores de sintaxis
+      - name: Check syntax
+        run: |
+          find . -type f -name "*.py" -exec python -m py_compile {} +
+
+      # Ejecutar tests con cobertura
+      - name: Run unit tests with coverage
+        run: |
+          python -m pytest --cov=. --cov-report=xml --cov-report=term-missing -v
+
+      # Análisis con SonarCloud
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        with:
+          projectKey: RodrigoMari_agiles-2025
+          organization: rodrigomari
+          token: ${{ secrets.SONAR_TOKEN }}
+          extraProperties: |
+            sonar.python.coverage.reportPaths=coverage.xml
+            sonar.sources=.
+            sonar.tests=.
+            sonar.exclusions=**/tests/**
