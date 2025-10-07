@@ -40,9 +40,6 @@ jobs:
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
-        with:
-          projectKey: RodrigoMari_agiles-2025
-          organization: rodrigomari
-          token: ${{ secrets.SONAR_TOKEN }}
-          extraProperties: |
-            sonar.python.coverage.reportPaths=coverage.xml
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: https://sonarcloud.io
