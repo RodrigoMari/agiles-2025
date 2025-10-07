@@ -42,11 +42,11 @@ jobs:
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
         with:
-          projectKey: RodrigoMari_agiles-2025
-          organization: rodrigomari
-          token: ${{ secrets.SONAR_TOKEN }}
-          extraProperties: |
-            sonar.python.coverage.reportPaths=coverage.xml
-            sonar.sources=.
-            sonar.tests=.
-            sonar.exclusions=**/tests/**
+          args: >
+            -Dsonar.projectKey=RodrigoMari_agiles-2025
+            -Dsonar.organization=rodrigomari
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+            -Dsonar.python.coverage.reportPaths=coverage.xml
+            -Dsonar.sources=.
+            -Dsonar.tests=.
+            -Dsonar.exclusions=**/tests/**
