@@ -96,3 +96,15 @@ def testSinVidasRestantesYPierde():
     assert juego.vidas == 0
     assert juego.victoria is False
     assert juego.terminado is True
+
+def testValidarSoloLetras():
+    juego = Ahorcado(['python'], vidas=5)
+    juego.adivinar_letra("1")
+    assert "1" not in juego.palabra_oculta
+    assert juego.validar_solo_letras("1") is False
+    juego.adivinar_letra("$")
+    assert "$" not in juego.palabra_oculta
+    assert juego.validar_solo_letras("$") is False
+    juego.adivinar_letra(" ")
+    assert " " not in juego.palabra_oculta
+    assert juego.validar_solo_letras(" ") is False

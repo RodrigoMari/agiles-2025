@@ -33,6 +33,8 @@ class Ahorcado:
     def adivinar_letra(self, letra):
         if self.terminado:
             return
+        if self.validar_solo_letras(letra) is False:
+            return  # Si no es una letra o si es más de una letra, no hacer nada
         if self.letra_repetida(letra):
             return
         self.letras_intentadas.append(letra)
@@ -59,4 +61,7 @@ class Ahorcado:
             self.terminado = True
         else:
             self.descuenta_vida()
+
+    def validar_solo_letras(self, entrada):
+        return entrada.isalpha()
 
