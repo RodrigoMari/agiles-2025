@@ -108,3 +108,15 @@ def testValidarSoloLetras():
     juego.adivinar_letra(" ")
     assert " " not in juego.palabra_oculta
     assert juego.validar_solo_letras(" ") is False
+
+def testValidarPalabraSoloLetras():
+    juego = Ahorcado(['python'], vidas=5)
+    juego.adivinar_palabra("pyth0n")
+    assert "pyth0n" != juego.palabra_secreta
+    assert juego.validar_solo_letras("pyth0n") is False
+    juego.adivinar_palabra("pyth$n")
+    assert "pyth$n" != juego.palabra_secreta
+    assert juego.validar_solo_letras("pyth$n") is False
+    juego.adivinar_palabra("py thon")
+    assert "py thon" != juego.palabra_secreta
+    assert juego.validar_solo_letras("py thon") is False

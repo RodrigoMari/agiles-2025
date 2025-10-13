@@ -34,7 +34,7 @@ class Ahorcado:
         if self.terminado:
             return
         if self.validar_solo_letras(letra) is False:
-            return  # Si no es una letra o si es más de una letra, no hacer nada
+            return  
         if self.letra_repetida(letra):
             return
         self.letras_intentadas.append(letra)
@@ -52,6 +52,8 @@ class Ahorcado:
     def adivinar_palabra(self, palabra):
         if self.terminado or len(palabra) < 2:
             return  # Si el juego ha terminado, o la palabra es de longitud 1 (en realidad es una letra)
+        if self.validar_solo_letras(palabra) is False:
+            return  
         if self.palabra_repetida(palabra):
             return
         self.palabras_intentadas.append(palabra)
