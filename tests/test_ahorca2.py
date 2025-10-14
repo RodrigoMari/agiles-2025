@@ -1,7 +1,8 @@
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from ahorca2 import Ahorcado
+from ahorca2 import Ahorcado, cargar_palabras_desde_comas
+
 
 def testInicializaJuego():
     palabras = ['python']
@@ -120,3 +121,8 @@ def testValidarPalabraSoloLetras():
     juego.adivinar_palabra("py thon")
     assert "py thon" != juego.palabra_secreta
     assert juego.validar_solo_letras("py thon") is False
+
+def testPalabraElegidaDeListadoDePalabrasEnEspañol():
+    palabras = cargar_palabras_desde_comas("../español.txt")
+    juego = Ahorcado(palabras, vidas=5)
+    assert juego.palabra_secreta in palabras

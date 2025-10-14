@@ -1,5 +1,14 @@
 import random
 
+def cargar_palabras_desde_comas(archivo):
+    with open(archivo, "r",encoding="utf-8") as f:
+        contenido = f.read()
+        palabras = [palabra.strip() for palabra in contenido.split(",") if palabra.strip()]
+    return palabras
+
+#palabras = cargar_palabras_desde_comas("español.txt")
+#print(palabras)
+
 class Ahorcado:
     def __init__(self, palabras, vidas=5):
         self.palabra_secreta = random.choice(palabras)
