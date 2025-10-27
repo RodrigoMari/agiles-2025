@@ -22,7 +22,7 @@ class Ahorcado:
 
     def termina_juego(self):
       self.terminado = True
-      if self.vidas <= 0:
+      if self.vidas == 0:
           self.victoria = False
       else:
           self.victoria = True
@@ -30,7 +30,7 @@ class Ahorcado:
 
     def descuenta_vida(self):
         self.vidas -= 1
-        if self.vidas <= 0:
+        if self.vidas == 0:
             self.termina_juego()
 
     def letra_repetida(self, letra):
@@ -53,8 +53,7 @@ class Ahorcado:
                 if l == letra:
                     self.palabra_oculta[i] = letra
             if self.palabra_oculta == list(self.palabra_secreta):
-                self.victoria = True
-                self.terminado = True
+                self.termina_juego()
         else:
             self.descuenta_vida()
 
@@ -68,8 +67,7 @@ class Ahorcado:
         self.palabras_intentadas.append(palabra)
         if palabra == self.palabra_secreta:
             self.palabra_oculta = list(self.palabra_secreta)
-            self.victoria = True
-            self.terminado = True
+            self.termina_juego()
         else:
             self.descuenta_vida()
 
