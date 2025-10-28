@@ -123,6 +123,7 @@ def testValidarPalabraSoloLetras():
     assert juego.validar_solo_letras("py thon") is False
 
 def testPalabraElegidaDeListadoDePalabrasEnEspañol():
-    palabras = cargar_palabras_desde_comas("../español.txt")
+    ruta_archivo = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'español.txt')
+    palabras = cargar_palabras_desde_comas(ruta_archivo)
     juego = Ahorcado(palabras, vidas=5)
     assert juego.palabra_secreta in palabras
