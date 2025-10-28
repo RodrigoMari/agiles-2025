@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Juego del Ahorcado</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body
+    class="bg-gray-800 text-white flex flex-col items-center justify-center min-h-screen font-sans p-4"
+  >
+    <div
+      class="w-full max-w-2xl mx-auto bg-gray-900 rounded-lg shadow-xl p-6 md:p-8"
+    >
+      <h1 class="text-3xl md:text-4xl font-bold text-center text-cyan-400 mb-6">
+        Juego del Ahorcado
+      </h1>
+
+      <div class="flex flex-col md:flex-row items-center justify-around mb-6">
+        <div class="w-48 h-48 mb-4 md:mb-0">
+          <svg id="hangman-svg" viewBox="0 0 200 250" class="w-full h-full">
+            <line
+              x1="10"
+              y1="230"
+              x2="190"
+              y2="230"
+              stroke="white"
+              stroke-width="4"
+            />
+            <line
+              x1="50"
+              y1="230"
+              x2="50"
+              y2="20"
+              stroke="white"
+              stroke-width="4"
+            />
+            <line
+              x1="50"
+              y1="20"
+              x2="150"
+              y2="20"
+              stroke="white"
+              stroke-width="4"
+            />
+            <line
+              x1="150"
+              y1="20"
+              x2="150"
+              y2="50"
+              stroke="white"
+              stroke-width="4"
+            />
+            <circle
+              id="head"
+              cx="150"
+              cy="70"
+              r="20"
+              stroke="#f472b6"
+              stroke-width="4"
+              fill="none"
+              class="hidden"
+            />
+            <line
+              id="body"
+              x1="150"
+              y1="90"
+              x2="150"
+              y2="150"
+              stroke="#f472b6"
+              stroke-width="4"
+              class="hidden"
+            />
+            <line
+              id="left-arm"
+              x1="150"
+              y1="110"
+              x2="120"
+              y2="140"
+              stroke="#f472b6"
+              stroke-width="4"
+              class="hidden"
+            />
+            <line
+              id="right-arm"
+              x1="150"
+              y1="110"
+              x2="180"
+              y2="140"
+              stroke="#f472b6"
+              stroke-width="4"
+              class="hidden"
+            />
+            <line
+              id="left-leg"
+              x1="150"
+              y1="150"
+              x2="120"
+              y2="190"
+              stroke="#f472b6"
+              stroke-width="4"
+              class="hidden"
+            />
+            <line
+              id="right-leg"
+              x1="150"
+              y1="150"
+              x2="180"
+              y2="190"
+              stroke="#f472b6"
+              stroke-width="4"
+              class="hidden"
+            />
+          </svg>
+        </div>
+
+        <div id="game-status" class="text-center">
+          <p class="text-lg mb-2">
+            Vidas restantes:
+            <span id="lives-left" class="font-bold text-xl text-amber-400"
+              >6</span
+            >
+          </p>
+          <div
+            id="word-display"
+            class="text-4xl tracking-widest font-mono mb-4 h-12"
+          ></div>
+          <p id="game-message" class="text-xl h-8"></p>
+        </div>
+      </div>
+
+      <form id="guess-word-form" class="flex justify-center gap-2 mt-4">
+        <input
+          type="text"
+          id="word-input"
+          placeholder="Arriesgar palabra..."
+          class="bg-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+        />
+        <button
+          type="submit"
+          class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300"
+        >
+          Arriesgar
+        </button>
+      </form>
+
+      <div
+        id="keyboard"
+        class="grid grid-cols-7 sm:grid-cols-9 gap-2 mt-6"
+      ></div>
+
+      <div class="text-center mt-8">
+        <button
+          id="reset-button"
+          class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-6 rounded-lg transition duration-300"
+        >
+          Nueva Partida
+        </button>
+      </div>
+    </div>
+
+    <script src="js/script.js"></script>
+  </body>
+</html>
