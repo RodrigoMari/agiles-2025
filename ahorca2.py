@@ -3,7 +3,7 @@ import random
 def cargar_palabras_desde_comas(archivo):
     with open(archivo, "r",encoding="utf-8") as f:
         contenido = f.read()
-        palabras = [palabra.strip() for palabra in contenido.split(",") if palabra.strip()]
+        palabras = [palabra.strip().replace('á','a').replace('é','e').replace('í','i').replace('ó','o').replace('ú','u').replace('ü','u') for palabra in contenido.split(",") if palabra.strip()]
     return palabras
 
 #palabras = cargar_palabras_desde_comas("español.txt")
