@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   // URL de tu API local
-  const API_URL = "http://127.0.0.1:5000";
+  const API_URL = "";
   const VIDAS_INICIALES = 6;
 
   // Elementos del DOM
