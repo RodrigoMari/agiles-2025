@@ -2,15 +2,13 @@ import os
 from flask import Flask, jsonify, request, session
 from flask_cors import CORS
 
-# Importamos tu lógica del juego existente
+# Importamos la lógica del juego existente
 from ahorca2 import Ahorcado, cargar_palabras_desde_comas
 
 app = Flask(__name__)
 # Se necesita una clave secreta para manejar "sesiones"
-# (para recordar el juego de cada usuario)
-app.config['SECRET_KEY'] = 'tu_clave_secreta_muy_dificil' 
+app.config['SECRET_KEY'] = 'aaa'
 
-# Configura CORS para permitir solicitudes desde tu frontend
 CORS(app, supports_credentials=True)
 
 # Cargamos las palabras una sola vez al iniciar el servidor
@@ -18,7 +16,7 @@ try:
     PALABRAS = cargar_palabras_desde_comas("español.txt")
 except FileNotFoundError:
     print("Error: No se encontró el archivo 'español.txt'")
-    PALABRAS = ["python"] # Lista de respaldo
+    PALABRAS = ["python"]
 
 def guardar_estado_juego(juego):
     """Guarda el estado del objeto Ahorcado en la sesión."""
@@ -39,8 +37,8 @@ def cargar_estado_juego():
     if not estado:
         return None
     
-    # Reconstruimos el objeto. La lista de palabras no importa aquí
-    # ya que la palabra secreta ya fue elegida.
+    # La lista de palabras no importa
+    # ya que la palabra secreta fue elegida.
     juego = Ahorcado(['dummy'], vidas=estado['vidas']) 
     
     # Sobrescribimos el estado del objeto con el guardado
@@ -74,10 +72,8 @@ def obtener_estado_publico(juego):
 def nuevo_juego():
     """
     Inicia una nueva partida.
-    Usa la lógica de tu clase Ahorcado, que elige una palabra aleatoria
-    del archivo 'español.txt' cargado.
+    Elige una palabra aleatoria del archivo 'español.txt' cargado.
     """
-    # Usaremos 6 vidas para que coincida con el dibujo del ahorcado (cabeza, cuerpo, 2 brazos, 2 piernas)
     juego = Ahorcado(PALABRAS, vidas=6) 
     guardar_estado_juego(juego)
     return jsonify(obtener_estado_publico(juego))
@@ -85,9 +81,6 @@ def nuevo_juego():
 
 @app.route('/api/guess', methods=['POST'])
 def adivinar():
-    """
-    Procesa un intento (letra o palabra) usando la lógica de ahorca2.py.
-    """
     juego = cargar_estado_juego()
     if not juego or juego.terminado:
         return jsonify({'error': 'No hay juego activo o ya terminó'}), 400
@@ -109,5 +102,4 @@ def adivinar():
 
 
 if __name__ == '__main__':
-    # Corre el servidor en http://127.0.0.1:5000
     app.run(debug=True, port=5000)

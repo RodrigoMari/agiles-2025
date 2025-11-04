@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "right-leg",
   ];
 
-  // --- INICIALIZACIÓN DEL JUEGO ---
+  // INICIALIZACIÓN DEL JUEGO
   async function initializeGame() {
     try {
       // Llama a la API para crear un nuevo juego en el backend
@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // --- CREAR TECLADO (Solo visual) ---
+  // CREAR TECLADO
   function createKeyboard() {
     keyboardDiv.innerHTML = "";
     const alphabet = "abcdefghijklmnñopqrstuvwxyz";
@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // --- MANEJAR INTENTO (Letra o Palabra) ---
+  // MANEJAR INTENTO
   async function handleGuess(guess) {
     if (!guess) return; // Evitar envíos vacíos
 
@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const response = await fetch(`${API_URL}/api/guess`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include", // Enviar cookies de sesión
+        credentials: "include",
         body: JSON.stringify({ guess: guess }),
       });
       const data = await response.json();
@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // --- FUNCIÓN CENTRAL PARA ACTUALIZAR LA UI ---
+  // FUNCIÓN CENTRAL PARA ACTUALIZAR LA UI
   function updateUI(data) {
     // Actualizar palabra oculta
     wordDisplay.textContent = data.palabra_oculta.join(" ");
@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // --- RESETEAR ESTADO VISUAL ---
+  //RESET VISUAL
   function resetUI() {
     gameMessage.textContent = "";
     wordInput.value = ""; // Limpiar input de palabra
@@ -134,7 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .forEach((el) => (el.disabled = false));
   }
 
-  // --- ACTUALIZAR DIBUJO DEL AHORCADO ---
+  // ACTUALIZAR DIBUJO DEL AHORCADO
   function updateHangmanDrawing(currentLives) {
     const wrongGuesses = VIDAS_INICIALES - currentLives;
 
@@ -151,7 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // --- FINALIZAR JUEGO ---
+  // FINALIZAR JUEGO
   function endGame(isWinner, secretWord) {
     if (isWinner) {
       gameMessage.textContent = "¡Felicidades, ganaste! 🎉";
@@ -175,7 +175,6 @@ document.addEventListener("DOMContentLoaded", () => {
     resetButton.textContent = "Jugar de Nuevo";
   }
 
-  // --- EVENT LISTENERS ---
   resetButton.addEventListener("click", initializeGame);
 
   // Listener para el formulario de arriesgar palabra
@@ -188,7 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // --- INICIO ---
-  createKeyboard(); // Dibuja el teclado una vez
-  initializeGame(); // Llama a la API para la primera partida
+  // INICIO
+  createKeyboard();
+  initializeGame();
 });

@@ -1,12 +1,13 @@
 describe("Juego del Ahorcado - Flujos E2E", () => {
-  // Definimos la URL de la API por separado para claridad
+  // Definimos la URL de la API por separado
   const API_URL = "http://127.0.0.1:5000/api";
   const PALABRA = "python";
-  const VIDAS_INICIALES = 6; // Basado en script.js
+  const VIDAS_INICIALES = 6;
 
-  // Antes de cada prueba ('it'), visitamos la página
+  // Antes de cada prueba visitamos la página
   beforeEach(() => {
-    // Interceptamos la llamada de 'Nueva Partida' que se hace al cargar
+    // 'Nueva Partida', que se hace al cargar
+
     cy.intercept("POST", `${API_URL}/new_game`, {
       statusCode: 200,
       body: {
@@ -19,7 +20,7 @@ describe("Juego del Ahorcado - Flujos E2E", () => {
       },
     }).as("newGame");
 
-    // Visitamos la URL base (definida en cypress.config.js)
+    // Visitamos la URL base definida en cypress.config.js
     cy.visit("/");
 
     // Esperamos a que la llamada de 'newGame' termine antes de continuar
@@ -28,7 +29,6 @@ describe("Juego del Ahorcado - Flujos E2E", () => {
 
   // Escenario 1: El jugador gana sin errores
   it("Scenario: El jugador adivina todas las letras sin errores (GANA)", () => {
-    // --- Mock de la API ---
     // Preparamos las respuestas para cada letra de "python"
     cy.intercept("POST", `${API_URL}/guess`, (req) => {
       const guess = req.body.guess;
@@ -104,7 +104,6 @@ describe("Juego del Ahorcado - Flujos E2E", () => {
       }
     }).as("guessAPI");
 
-    // --- Acciones del Usuario ---
     cy.get("#btn-p").click();
     cy.get("#word-display").should("have.text", "p _ _ _ _ _");
     cy.get("#btn-y").click();
@@ -117,7 +116,6 @@ describe("Juego del Ahorcado - Flujos E2E", () => {
     cy.get("#word-display").should("have.text", "p y t h o _");
     cy.get("#btn-n").click();
 
-    // --- Verificaciones Finales ---
     cy.get("#word-display").should("have.text", "p y t h o n");
     cy.get("#lives-left").should("have.text", VIDAS_INICIALES);
     cy.get("#game-message").should("contain", "¡Felicidades, ganaste!");
@@ -278,9 +276,8 @@ describe("Juego del Ahorcado - Flujos E2E", () => {
     cy.get("#game-message").should("contain", "¡Felicidades, ganaste!");
   });
 
-  // Extra: Probar arriesgar palabra (GANA)
+  // Escenario 4: Probar arriesgar palabra (GANA)
   it("Scenario: El jugador arriesga la palabra correcta (GANA)", () => {
-    // Mock para la llamada de 'adivinar_palabra'
     cy.intercept("POST", `${API_URL}/guess`, (req) => {
       if (req.body.guess === "python") {
         req.reply({
@@ -296,20 +293,17 @@ describe("Juego del Ahorcado - Flujos E2E", () => {
       }
     }).as("guessWord");
 
-    // --- Acción del Usuario ---
     cy.get("#word-input").type("python");
     cy.get("#guess-word-form").submit();
     cy.wait("@guessWord");
 
-    // --- Verificaciones Finales ---
     cy.get("#game-message").should("contain", "¡Felicidades, ganaste!");
     cy.get("#lives-left").should("have.text", VIDAS_INICIALES);
     cy.get("#word-input").should("be.disabled"); // Formulario deshabilitado
   });
 
-  // Extra: Probar arriesgar palabra (PIERDE)
+  // Escenario 5: Probar arriesgar palabra (PIERDE UNA VIDA)
   it("Scenario: El jugador arriesga la palabra incorrecta (PIERDE VIDA)", () => {
-    // Mock para la llamada de 'adivinar_palabra'
     cy.intercept("POST", `${API_URL}/guess`, (req) => {
       if (req.body.guess === "java") {
         req.reply({
@@ -324,12 +318,10 @@ describe("Juego del Ahorcado - Flujos E2E", () => {
       }
     }).as("guessWord");
 
-    // --- Acción del Usuario ---
     cy.get("#word-input").type("java");
     cy.get("#guess-word-form").submit();
     cy.wait("@guessWord");
 
-    // --- Verificaciones Finales ---
     cy.get("#lives-left").should("have.text", "5");
     cy.get("#game-message").should("not.contain", "Perdiste"); // Aún no pierde
     cy.get("#word-input").should("have.value", ""); // El input se limpia
