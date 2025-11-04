@@ -1,6 +1,6 @@
 describe("Juego del Ahorcado - Flujos E2E", () => {
   // Definimos la URL de la API por separado
-  const API_URL = "http://127.0.0.1:5000/api";
+  const API_URL = "/api";
   const PALABRA = "python";
   const VIDAS_INICIALES = 6;
 

@@ -6,8 +6,10 @@ from flask_cors import CORS
 from ahorca2 import Ahorcado, cargar_palabras_desde_comas
 
 app = Flask(__name__)
-# Se necesita una clave secreta para manejar "sesiones"
-app.config['SECRET_KEY'] = 'aaa'
+
+# El 'static_folder' ahora apunta a tu carpeta 'public'
+app = Flask(__name__, static_folder='public', static_url_path='')
+app.config['SECRET_KEY'] = 'aaa' 
 
 CORS(app, supports_credentials=True)
 
@@ -100,6 +102,24 @@ def adivinar():
     guardar_estado_juego(juego)
     return jsonify(obtener_estado_publico(juego))
 
+# --- INICIO: NUEVAS RUTAS PARA SERVIR EL FRONTEND ---
 
-if __name__ == '__main__':
+@app.route('/')
+def serve_index():
+    """Sirve el archivo index.html en la ruta raíz."""
+    # Busca 'index.html' dentro de la 'static_folder' (que definimos como 'public')
+    return app.send_static_file('index.html')
+
+@app.route('/<path:filename>')
+def serve_static(filename):
+    """
+    Sirve cualquier otro archivo estático (como css/style.css o js/script.js)
+    que se pida desde la carpeta 'public'.
+    """
+    # Esto es necesario para que index.html pueda cargar css/style.css y js/script.js
+    return send_from_directory(app.static_folder, filename)
+
+# --- FIN: NUEVAS RUTAS PARA SERVIR EL FRONTEND ---
+
+##if __name__ == '__main__':
     app.run(debug=True, port=5000)
