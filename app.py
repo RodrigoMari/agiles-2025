@@ -1,13 +1,13 @@
 import os
-from flask import Flask, jsonify, request, session
+# AGREGADO: send_from_directory
+from flask import Flask, jsonify, request, session, send_from_directory
 from flask_cors import CORS
 
 # Importamos la lógica del juego existente
 from ahorca2 import Ahorcado, cargar_palabras_desde_comas
 
-app = Flask(__name__)
-
 # El 'static_folder' ahora apunta a tu carpeta 'public'
+# ELIMINADA: La primera inicialización redundante de 'app'
 app = Flask(__name__, static_folder='public', static_url_path='')
 app.config['SECRET_KEY'] = 'aaa' 
 
@@ -39,11 +39,8 @@ def cargar_estado_juego():
     if not estado:
         return None
     
-    # La lista de palabras no importa
-    # ya que la palabra secreta fue elegida.
     juego = Ahorcado(['dummy'], vidas=estado['vidas']) 
     
-    # Sobrescribimos el estado del objeto con el guardado
     juego.palabra_secreta = estado['palabra_secreta']
     juego.palabra_oculta = estado['palabra_oculta']
     juego.letras_adivinadas = estado['letras_adivinadas']
@@ -63,7 +60,6 @@ def obtener_estado_publico(juego):
         'terminado': juego.terminado,
         'victoria': juego.victoria
     }
-    # Si el juego terminó, revela la palabra secreta
     if juego.terminado:
         estado_publico['palabra_secreta'] = juego.palabra_secreta
         
@@ -72,10 +68,6 @@ def obtener_estado_publico(juego):
 
 @app.route('/api/new_game', methods=['POST'])
 def nuevo_juego():
-    """
-    Inicia una nueva partida.
-    Elige una palabra aleatoria del archivo 'español.txt' cargado.
-    """
     juego = Ahorcado(PALABRAS, vidas=6) 
     guardar_estado_juego(juego)
     return jsonify(obtener_estado_publico(juego))
@@ -88,12 +80,11 @@ def adivinar():
         return jsonify({'error': 'No hay juego activo o ya terminó'}), 400
 
     data = request.get_json()
-    intento = data.get('guess', '').lower().strip() # 'guess' puede ser una letra o una palabra
+    intento = data.get('guess', '').lower().strip()
 
     if not intento:
         return jsonify({'error': 'No se envió ningún intento'}), 400
 
-    # Usamos la lógica de tu clase Ahorcado
     if len(intento) == 1:
         juego.adivinar_letra(intento)
     else:
@@ -107,19 +98,15 @@ def adivinar():
 @app.route('/')
 def serve_index():
     """Sirve el archivo index.html en la ruta raíz."""
-    # Busca 'index.html' dentro de la 'static_folder' (que definimos como 'public')
     return app.send_static_file('index.html')
 
 @app.route('/<path:filename>')
 def serve_static(filename):
-    """
-    Sirve cualquier otro archivo estático (como css/style.css o js/script.js)
-    que se pida desde la carpeta 'public'.
-    """
-    # Esto es necesario para que index.html pueda cargar css/style.css y js/script.js
+    """Sirve cualquier otro archivo estático (css/style.css, js/script.js)"""
+    # CORREGIDO: Usando send_from_directory importado
     return send_from_directory(app.static_folder, filename)
 
 # --- FIN: NUEVAS RUTAS PARA SERVIR EL FRONTEND ---
 
-##if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+# ELIMINADO: El bloque 'if __name__ == "__main__":'
+# Gunicorn se encargará de correr el servidor.
