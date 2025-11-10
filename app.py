@@ -1,5 +1,4 @@
 import os
-# AGREGADO: send_from_directory
 from flask import Flask, jsonify, request, session, send_from_directory
 from flask_cors import CORS
 
@@ -7,7 +6,6 @@ from flask_cors import CORS
 from ahorca2 import Ahorcado, cargar_palabras_desde_comas
 
 # El 'static_folder' ahora apunta a tu carpeta 'public'
-# ELIMINADA: La primera inicialización redundante de 'app'
 app = Flask(__name__, static_folder='public', static_url_path='')
 app.config['SECRET_KEY'] = 'aaa' 
 
@@ -105,8 +103,3 @@ def serve_static(filename):
     """Sirve cualquier otro archivo estático (css/style.css, js/script.js)"""
     # CORREGIDO: Usando send_from_directory importado
     return send_from_directory(app.static_folder, filename)
-
-# --- FIN: NUEVAS RUTAS PARA SERVIR EL FRONTEND ---
-
-# ELIMINADO: El bloque 'if __name__ == "__main__":'
-# Gunicorn se encargará de correr el servidor.

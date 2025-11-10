@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateHangmanDrawing(currentLives) {
     const wrongGuesses = VIDAS_INICIALES - currentLives;
 
-    // Ocultar todas las partes primero (por si acaso)
+    // Ocultar todas las partes primero
     hangmanParts.forEach((part) =>
       document.getElementById(part).classList.add("hidden")
     );

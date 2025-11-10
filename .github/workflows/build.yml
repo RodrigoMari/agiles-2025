@@ -1,4 +1,4 @@
-name: Build and Test (Python)
+name: CI - Python Backend & Cypress Frontend
 
 on:
   push:
@@ -8,28 +8,49 @@ on:
   pull_request:
 
 jobs:
-  build:
+  test: # Renombrado de 'build' a 'test' para más claridad
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # --- Pasos de Python (Backend) ---
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install dependencies
+      - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           pip install pytest pytest-cov flake8
 
-      - name: Check syntax
+      - name: Check Python syntax
         run: |
           find . -type f -name "*.py" -exec python -m py_compile {} +
 
-      - name: Run tests and generate coverage
+      - name: Run backend tests (pytest)
         run: |
           pytest --cov=. --cov-report=xml --cov-report=term-missing -v
+
+      # --- Pasos de Cypress (Frontend E2E) ---
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Run Frontend E2E tests (Cypress)
+        uses: cypress-io/github-action@v6
+        with:
+          # 1. Instala dependencias de npm (package.json)
+          install-command: npm install
+          
+          # 2. Comando para iniciar tu servidor Flask
+          start: python app.py
+          
+          # 3. URL que Cypress esperará a que esté activa
+          wait-on: 'http://localhost:5000'
+
+          browser: chrome
