@@ -43,15 +43,12 @@ jobs:
 
       - name: Run Frontend E2E tests (Cypress)
         uses: cypress-io/github-action@v6
+        # 👇 Añade este bloque 'env'
+        env:
+          FLASK_APP: app.py
         with:
-          # 1. Instala dependencias de npm (package.json)
           install-command: npm install
-          
-          # 2. Comando para iniciar tu servidor Flas
-          start: "FLASK_APP=app.py flask run --host=0.0.0.0 --port=5000"
-          
-          # 3. URL que Cypress esperará a que esté activa
+          # 👇 Ahora el comando 'start' es más limpio
+          start: "flask run --host=0.0.0.0 --port=5000"
           wait-on: 'http://localhost:5000'
-          
-          # 4. (Opcional) Especifica el navegador
           browser: chrome
