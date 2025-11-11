@@ -1,4 +1,7 @@
-name: CI Server (Python with Coverage + SonarCloud)
+# Este es un único archivo CI que reemplaza a build.yml y ci-sonarcloude.yml
+# Combina pruebas de Backend (Python), pruebas de Frontend (Cypress) y el escaneo de SonarCloud.
+
+name: CI - Backend, Frontend & SonarCloud
 
 on:
   push:
@@ -7,37 +10,62 @@ on:
   pull_request:
 
 jobs:
-  build-test-coverage:
+  test-and-scan:
     runs-on: ubuntu-latest
 
     steps:
-      # Descargar el código del repositorio
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Configurar Python
+      # --- 1. Configuración y Pruebas de Backend (Python) ---
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      # Instalar dependencias y herramientas de prueba
-      - name: Install dependencies and testing tools
+      - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           python -m pip install pytest pytest-cov
 
-      # Verificar errores de sintaxis
-      - name: Check syntax
+      - name: Check Python syntax
         run: |
           find . -type f -name "*.py" -exec python -m py_compile {} +
 
-      # Ejecutar tests con cobertura
-      - name: Run unit tests with coverage
+      - name: Run backend tests with coverage (pytest)
         run: |
           python -m pytest --cov=. --cov-report=xml --cov-report=term-missing -v
 
+      # --- 2. Configuración y Pruebas de Frontend (Cypress) ---
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Node.js dependencies (NPM)
+        run: npm install
+
+      - name: Install wait-on (herramienta para esperar al servidor)
+        run: npm install -g wait-on
+
+      - name: Start backend manually
+        run: python app.py &
+        # El '&' al final ejecuta el servidor en segundo plano
+
+      - name: Wait for backend to be ready
+        run: wait-on 'http://localhost:5000' -t 30000
+        # Espera hasta 30 segundos a que http://localhost:5000 responda
+
+      - name: Run Frontend E2E tests (Cypress)
+        uses: cypress-io/github-action@v6
+        with:
+          # Nota: Ya no usamos 'start' ni 'wait-on' aquí
+          # El servidor ya está corriendo manualmente.
+          browser: chrome
+          # 'install-command' también se movió a un paso separado
+
+      # --- 3. Análisis de SonarCloud (Al final) ---
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
         env:

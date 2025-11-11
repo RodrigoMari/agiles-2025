@@ -39,7 +39,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '24'
+          node-version: '20' # Puedes usar 18, 20, etc.
 
       - name: Run Frontend E2E tests (Cypress)
         uses: cypress-io/github-action@v6
@@ -52,5 +52,6 @@ jobs:
           
           # 3. URL que Cypress esperará a que esté activa
           wait-on: 'http://localhost:5000'
-
+          
+          # 4. (Opcional) Especifica el navegador
           browser: chrome
