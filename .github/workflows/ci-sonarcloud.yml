@@ -1,7 +1,4 @@
-# Este es un único archivo CI que reemplaza a build.yml y ci-sonarcloude.yml
-# Combina pruebas de Backend (Python), pruebas de Frontend (Cypress) y el escaneo de SonarCloud.
-
-name: CI - Backend, Frontend & SonarCloud
+name: CI Server (Python, Cypress & SonarCloud)
 
 on:
   push:
@@ -10,14 +7,14 @@ on:
   pull_request:
 
 jobs:
-  test-and-scan:
+  test-and-scan: # Renombré el job para que sea más claro
     runs-on: ubuntu-latest
 
     steps:
+      # --- Configuración Base y Pruebas de Backend ---
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # --- 1. Configuración y Pruebas de Backend (Python) ---
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -37,35 +34,28 @@ jobs:
         run: |
           python -m pytest --cov=. --cov-report=xml --cov-report=term-missing -v
 
-      # --- 2. Configuración y Pruebas de Frontend (Cypress) ---
+      # --- Pruebas de Frontend (NUEVO) ---
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-
-      - name: Install Node.js dependencies (NPM)
-        run: npm install
-
-      - name: Install wait-on (herramienta para esperar al servidor)
-        run: npm install -g wait-on
-
-      - name: Start backend manually
-        run: python app.py &
-        # El '&' al final ejecuta el servidor en segundo plano
-
-      - name: Wait for backend to be ready
-        run: wait-on 'http://localhost:5000' -t 30000
-        # Espera hasta 30 segundos a que http://localhost:5000 responda
+          node-version: '20' # Asegúrate de que esta sea una versión de Node que uses
 
       - name: Run Frontend E2E tests (Cypress)
         uses: cypress-io/github-action@v6
         with:
-          # Nota: Ya no usamos 'start' ni 'wait-on' aquí
-          # El servidor ya está corriendo manualmente.
+          # 1. Instala dependencias de npm
+          install-command: npm install
+          
+          # 2. Inicia tu servidor Flask en segundo plano
+          start: "FLASK_APP=app.py flask run --host=0.0.0.0 --port=5000"
+          
+          # 3. Espera a que el servidor esté listo
+          wait-on: 'http://localhost:5000'
+          
+          # 4. (Opcional) Especifica un navegador
           browser: chrome
-          # 'install-command' también se movió a un paso separado
 
-      # --- 3. Análisis de SonarCloud (Al final) ---
+      # --- Análisis (ÚLTIMO PASO) ---
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
         env:
