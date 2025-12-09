@@ -39,16 +39,16 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Puedes usar 18, 20, etc.
+          node-version: '20'
 
       - name: Run Frontend E2E tests (Cypress)
         uses: cypress-io/github-action@v6
-        # 👇 Añade este bloque 'env'
+
         env:
           FLASK_APP: app.py
         with:
           install-command: npm install
-          # 👇 Ahora el comando 'start' es más limpio
+
           start: "flask run --host=0.0.0.0 --port=5000"
           wait-on: 'http://localhost:5000'
           browser: chrome

@@ -47,7 +47,7 @@ describe("Juego del Ahorcado - Flujos E2E", () => {
         case "y":
           req.reply({
             body: {
-              palabra_oculta: ["p", "y", "_", "_", "_", "_"],
+              palabra_oculta: ["p", "y", "e", "_", "_", "_"],
               vidas: VIDAS_INICIALES,
               letras_intentadas: ["p", "y"],
               terminado: false,
